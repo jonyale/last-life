@@ -20,6 +20,7 @@
             color: #ffffff;
             line-height: 1.4;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
         
         .container {
@@ -28,6 +29,125 @@
             padding: 0 20px;
             position: relative;
             z-index: 2;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0);
+            backdrop-filter: blur(0px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.3);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff0080;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-links li {
+            margin: 0;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff0080;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0080, #007fff);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff0080, #007fff);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(255, 0, 128, 0.3);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 0, 128, 0.5);
         }
         
         /* Hero Section */
@@ -612,12 +732,53 @@
         
         /* Responsive Design */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 10, 0.4);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                padding: 2rem 1.5rem;
+                gap: 1.5rem;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                text-align: center;
             }
-            
+
+            .nav-links.active {
+                transform: translateX(0);
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+            .hero {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
             .hero-tagline {
                 font-size: 1.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+                padding: 0 1rem;
             }
             
             .genesis-grid {
@@ -735,8 +896,24 @@
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">Last Life</a>
+            <ul class="nav-links">
+                <li><a href="#genesis">NFTs & Game</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#links">Links</a></li>
+            </ul>
+            <button class="nav-toggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="hero-content">
             <h1>Last Life</h1>
             <div class="hero-tagline">The first fighting game where every battle has real stakes.</div>
@@ -775,9 +952,9 @@
                     <div class="hit-icon">🔥</div>
                     <h3>Why Now</h3>
                     <ul>
-                        <li>Crybaby peepants saying "Crypto gaming is dead" means it's builder season.</li>
-                        <li>The tourists left. The real ones remain.</li>
-                        <li>We're cooking for you.</li>
+                        <li>While others debate, we build.</li>
+                        <li>Bear markets breed the strongest projects.</li>
+                        <li>This is when legends are forged.</li>
                     </ul>
                 </div>
             </div>
@@ -785,7 +962,7 @@
     </section>
 
     <!-- Genesis Fighters Section -->
-    <section class="genesis-section">
+    <section class="genesis-section" id="genesis">
         <div class="container">
             <div class="genesis-grid">
                 <div class="genesis-visual">
@@ -802,7 +979,7 @@
                 </div>
                 
                 <div class="genesis-content">
-                    <h2>Ultra-Limited Genesis Fighters<br>(3,999 NFTs)</h2>
+                    <h2>Ultra-Limited Genesis Fighters<br>3,999 NFTs</h2>
                     <ul class="genesis-features">
                         <li>Core fighters with unique, never-recreated wearables</li>
                         <li>VIP Tournament Access + $LIFE ecosystem rewards and leaderboard dominance</li>
@@ -969,9 +1146,6 @@
                 </div>
             </div>
             
-            <p style="text-align: center; margin-top: 2rem; font-weight: 600; color: #007fff;">
-                Principle: Skill determines survival. You keep what you earn.
-            </p>
         </div>
     </section>
 
@@ -981,7 +1155,7 @@
             <h2>Core Principles</h2>
             <div class="principles-grid">
                 <div class="principle-card">
-                    <div class="icon">🔒</div>
+                    <div class="icon">💎</div>
                     <h4>Ownership</h4>
                     <p>Your fighters, your $LIFE, your victories</p>
                 </div>
@@ -995,17 +1169,17 @@
                 <div class="principle-card">
                     <div class="icon">🥋</div>
                     <h4>Skill > Wallet</h4>
-                    <p>No pay-to-win</p>
+                    <p>Skill determines your destiny</p>
                 </div>
                 
                 <div class="principle-card">
-                    <div class="icon">😭</div>
-                    <h4>Build When Everyone's Crying</h4>
-                    <p>Craft for the long game</p>
+                    <div class="icon">🏗️</div>
+                    <h4>Build Through Every Season</h4>
+                    <p>Great projects emerge regardless of timing</p>
                 </div>
                 
                 <div class="principle-card">
-                    <div class="icon">🌐</div>
+                    <div class="icon">🤝</div>
                     <h4>Community Shapes Destiny</h4>
                     <p>$LIFE holders decide</p>
                 </div>
@@ -1014,7 +1188,7 @@
     </section>
 
     <!-- Team Section -->
-    <section class="team">
+    <section class="team" id="team">
         <div class="container">
             <h2>Team</h2>
             <div class="team-grid">
@@ -1024,21 +1198,21 @@
                         <div class="founder-name">AC</div>
                     </div>
                 </a>
-                
-                <a href="https://x.com/JonYale" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
-                    <div class="founder-card">
-                        <img src="jy-pfp-crop.png" alt="JY" class="founder-avatar">
-                        <div class="founder-name">JY</div>
-                    </div>
-                </a>
-                
+
                 <a href="https://x.com/888g6mini" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                     <div class="founder-card">
                         <img src="maepfp.jpg" alt="Mae" class="founder-avatar">
                         <div class="founder-name">Mae</div>
                     </div>
                 </a>
-                
+
+                <a href="https://x.com/JonYale" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="jy-pfp-crop.png" alt="JY" class="founder-avatar">
+                        <div class="founder-name">JY</div>
+                    </div>
+                </a>
+
             </div>
         </div>
     </section>
@@ -1048,24 +1222,31 @@
         <div class="container">
             <h2>Advisors</h2>
             <div class="team-grid">
+                <a href="https://x.com/MarianneNFTs" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="marianne-pfp.jpg" alt="Marianne" class="founder-avatar">
+                        <div class="founder-name">Marianne</div>
+                    </div>
+                </a>
+
                 <a href="https://x.com/Zaddy_Fi" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                     <div class="founder-card">
                         <img src="zaddypfp.jpg" alt="Zaddy" class="founder-avatar">
                         <div class="founder-name">Zaddy</div>
                     </div>
                 </a>
-                
-                <a href="https://x.com/crisnochris" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
-                    <div class="founder-card">
-                        <img src="christianpfp.jpg" alt="Christian" class="founder-avatar">
-                        <div class="founder-name">Christian</div>
-                    </div>
-                </a>
-                
+
                 <a href="https://x.com/meg_thorpe_" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                     <div class="founder-card">
                         <img src="megpfp.jpg" alt="Meg" class="founder-avatar">
                         <div class="founder-name">Meg</div>
+                    </div>
+                </a>
+
+                <a href="https://x.com/crisnochris" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="christianpfp.jpg" alt="Christian" class="founder-avatar">
+                        <div class="founder-name">Christian</div>
                     </div>
                 </a>
             </div>
@@ -1073,7 +1254,7 @@
     </section>
 
     <!-- Genesis Mint CTA Section -->
-    <section class="cta">
+    <section class="cta" id="links">
         <div class="container">
             <div class="cta-content">
                 <h2>🚨 Ultra-Limited Genesis: 3,999 Fighters. Exclusive Access.</h2>
@@ -1087,6 +1268,54 @@
             </div>
         </div>
     </section>
+
+    <script>
+        // Mobile navigation toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        navLinks.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Navbar scroll effect and back to top button functionality
+        const navbar = document.querySelector('.navbar');
+        const backToTopButton = document.querySelector('.back-to-top');
+
+        window.addEventListener('scroll', () => {
+            // Navbar transparency effect
+            if (window.pageYOffset > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Back to top button
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
 
 </body>
 </html>
