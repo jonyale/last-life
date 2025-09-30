@@ -3,7 +3,9 @@
     "allow": [
       "WebSearch",
       "WebFetch(domain:www.abs.xyz)",
-      "WebFetch(domain:app.air.inc)"
+      "WebFetch(domain:app.air.inc)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
