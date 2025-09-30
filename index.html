@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Life - Fight for Your $LIFE</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚔️</text></svg>">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f0f0f 100%);
+            color: #ffffff;
+            line-height: 1.4;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0);
+            backdrop-filter: blur(0px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.3);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff0080;
+            text-decoration: none;
+            text-shadow: 0 0 10px rgba(255, 0, 128, 0.5);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-links li {
+            margin: 0;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff0080;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0080, #007fff);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff0080, #007fff);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(255, 0, 128, 0.3);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 0, 128, 0.5);
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 70vh;
+            min-height: 600px;
+            background: 
+                linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+                url('cyberpunk-rooftop-action-scene.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 8rem;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,0,128,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0,127,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(138,43,226,0.05) 0%, transparent 70%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 6.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 
+                0 0 5px rgba(255, 0, 128, 0.8),
+                0 0 10px rgba(255, 0, 128, 0.6),
+                0 0 15px rgba(0, 127, 255, 0.4),
+                0 0 20px rgba(0, 127, 255, 0.3),
+                0 0 30px rgba(255, 0, 128, 0.2),
+                2px 2px 4px rgba(0, 0, 0, 0.8);
+            -webkit-text-stroke: 2px transparent;
+            background: linear-gradient(45deg, #ff0080, #007fff, #ff0080);
+            -webkit-background-clip: text;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.5)) drop-shadow(0 0 40px rgba(0, 127, 255, 0.3));
+        }
+        
+        .hero-tagline {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+        }
+        
+        .hero-subtitle + .hero-subtitle {
+            margin-top: -1.5rem;
+        }
+        
+        /* Quick Hits Section */
+        .quick-hits {
+            padding: 4rem 0;
+            background: 
+                linear-gradient(rgba(10,10,10,0.9), rgba(10,10,10,0.95)),
+                url('collect-heroes-game-screen.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .quick-hits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .hit-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff0080, #007fff, #8a2be2);
+        }
+        
+        .hit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hit-card h3 {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+        
+        .hit-card p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+        
+        .hit-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+        }
+        
+        .hit-card li {
+            color: #b0b0b0;
+            line-height: 1.6;
+            padding: 0.3rem 0;
+            position: relative;
+            padding-left: 1.2rem;
+        }
+        
+        .hit-card li::before {
+            content: '•';
+            color: #ff0080;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Genesis Fighters Section */
+        .genesis-section {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(255,0,128,0.02) 0%, rgba(0,127,255,0.02) 100%);
+        }
+        
+        .genesis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: flex-start;
+        }
+        
+        .genesis-visual {
+            text-align: center;
+        }
+        
+        .nft-placeholder {
+            width: 320px;
+            height: 520px;
+            background: url('armored-hero-character.gif') center/cover #1a1a2e;
+            border-radius: 0;
+            margin: 0 auto 2rem;
+            position: relative;
+            border: 3px solid #ff0080;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
+        }
+        
+        .gear-slots {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-top: 1.5rem;
+            max-width: 320px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .gear-slot {
+            background: linear-gradient(135deg, rgba(20,20,40,0.9) 0%, rgba(10,10,20,0.95) 100%);
+            border: 2px solid rgba(100,100,150,0.4);
+            border-radius: 12px;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #a0a0c0;
+            font-weight: 600;
+            position: relative;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                        box-shadow 0.2s ease, 
+                        border-color 0.2s ease;
+            box-shadow: 
+                inset 0 1px 0 rgba(255,255,255,0.1),
+                0 2px 4px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .gear-slot::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ffffff;
+            background-image: var(--item-image);
+            background-size: 60%;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2px solid;
+            border-radius: 12px;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 1;
+        }
+        
+        .gear-slot:hover {
+            transform: rotateY(180deg) scale(1.02);
+            cursor: pointer;
+            border-color: #ff0080;
+            box-shadow: 
+                0 0 15px rgba(255, 0, 128, 0.4),
+                0 0 30px rgba(255, 0, 128, 0.2),
+                inset 0 0 10px rgba(255, 255, 255, 0.1);
+            animation: glitch-flicker 0.1s ease-in-out;
+        }
+        
+        .gear-slot:hover > * {
+            opacity: 0;
+        }
+        
+        .gear-slot:hover::after {
+            transform: rotateY(0deg) scaleX(-1);
+        }
+        
+        .gear-slot::before {
+            content: "";
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                transparent 30%, 
+                rgba(255, 0, 128, 0.1) 50%, 
+                transparent 70%);
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            border-radius: 12px;
+            z-index: -1;
+        }
+        
+        .gear-slot:hover::before {
+            opacity: 1;
+            animation: scan-line 0.2s ease-in-out;
+        }
+        
+        @keyframes glitch-flicker {
+            0% { filter: brightness(1); }
+            25% { filter: brightness(1.2) contrast(1.1); }
+            50% { filter: brightness(0.9) contrast(1.2); }
+            75% { filter: brightness(1.1) contrast(0.9); }
+            100% { filter: brightness(1); }
+        }
+        
+        @keyframes scan-line {
+            0% { 
+                background: linear-gradient(45deg, 
+                    transparent 30%, 
+                    rgba(255, 0, 128, 0) 50%, 
+                    transparent 70%);
+            }
+            50% { 
+                background: linear-gradient(45deg, 
+                    transparent 30%, 
+                    rgba(255, 0, 128, 0.3) 50%, 
+                    transparent 70%);
+            }
+            100% { 
+                background: linear-gradient(45deg, 
+                    transparent 30%, 
+                    rgba(255, 0, 128, 0.1) 50%, 
+                    transparent 70%);
+            }
+        }
+        
+        .gear-slot[data-type="head"] {
+            --item-image: url('(Beret) Flint Green.png');
+        }
+        
+        .gear-slot[data-type="head"]::after {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.4);
+        }
+        
+        .gear-slot[data-type="necklace"] {
+            --item-image: url('Mortal Combat Necklace.png');
+        }
+        
+        .gear-slot[data-type="necklace"]::after {
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        .gear-slot[data-type="top"] {
+            --item-image: url('top.jpg');
+        }
+        
+        .gear-slot[data-type="top"]::after {
+            border-color: #45b7d1;
+            box-shadow: 0 0 15px rgba(69, 183, 209, 0.4);
+        }
+        
+        .gear-slot[data-type="belt"] {
+            --item-image: url('Gi Belt.png');
+        }
+        
+        .gear-slot[data-type="belt"]::after {
+            border-color: #32cd32;
+            box-shadow: 0 0 15px rgba(50, 205, 50, 0.4);
+        }
+        
+        .gear-slot[data-type="bottom"] {
+            --item-image: url('bottom.jpg');
+        }
+        
+        .gear-slot[data-type="bottom"]::after {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.4);
+        }
+        
+        .gear-slot[data-type="footwear"] {
+            --item-image: url('boots.jpg');
+        }
+        
+        .gear-slot[data-type="footwear"]::after {
+            border-color: #a29bfe;
+            box-shadow: 0 0 15px rgba(162, 155, 254, 0.4);
+        }
+        
+        
+        
+        .genesis-content h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            margin-top: 0;
+            color: #ff0080;
+            line-height: 1.2;
+        }
+        
+        .genesis-features {
+            list-style: none;
+            margin: 3rem 0;
+        }
+        
+        .genesis-features li {
+            padding: 0.8rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+        
+        .genesis-features li::before {
+            content: '⚔️';
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Tokenomics Section */
+        .tokenomics {
+            padding: 4rem 0;
+            background: rgba(10,10,10,0.9);
+        }
+        
+        .tokenomics h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #007fff;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .token-bar {
+            background: rgba(255,255,255,0.1);
+            height: 80px;
+            border-radius: 40px;
+            display: flex;
+            overflow: hidden;
+            margin: 2rem 0;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .token-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
+        }
+        
+        .token-segment:nth-child(1) {
+            background: linear-gradient(45deg, #ff0080, #ff4da6);
+            width: 70%;
+        }
+        
+        .token-segment:nth-child(2) {
+            background: linear-gradient(45deg, #007fff, #4da6ff);
+            width: 25%;
+        }
+        
+        .token-segment:nth-child(3) {
+            background: linear-gradient(45deg, #8a2be2, #a659e8);
+            width: 5%;
+            min-width: 120px;
+            font-size: 0.9rem;
+        }
+        
+        .token-utilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .utility-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .utility-item .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Core Principles */
+        .principles {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(138,43,226,0.02) 0%, rgba(255,0,128,0.02) 100%);
+        }
+        
+        .principles h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #8a2be2;
+        }
+        
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .principle-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .principle-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        .principle-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .principle-card h4 {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 4rem 0;
+            background: 
+                linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.9)),
+                url('character-inventory-screen.jpg');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(255,0,128,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(0,127,255,0.1) 0%, transparent 50%);
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+        
+        .cta-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .cta-button {
+            background: linear-gradient(45deg, #ff0080, #007fff);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255,0,128,0.3);
+            color: white;
+        }
+        
+        .final-tagline {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            color: #ffffff;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 10, 0.4);
+                backdrop-filter: blur(15px);
+                flex-direction: column;
+                padding: 2rem 1.5rem;
+                gap: 1.5rem;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                text-align: center;
+            }
+
+            .nav-links.active {
+                transform: translateX(0);
+            }
+
+            .nav-toggle {
+                display: block;
+            }
+
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 1rem;
+            }
+            .hero {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .hero-tagline {
+                font-size: 1.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+            
+            .genesis-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .nft-placeholder {
+                width: 280px;
+                height: 455px;
+            }
+            
+            .token-bar {
+                height: 60px;
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .token-segment {
+                width: 100% !important;
+                height: 60px;
+            }
+            
+            .cta-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* Team Section */
+        .team {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(10,10,20,0.95) 0%, rgba(20,15,25,0.98) 100%);
+            text-align: center;
+        }
+        
+        .team h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #ffffff;
+        }
+        
+        .team-grid {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+        }
+        
+        .founder-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 280px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .founder-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,0,128,0.3);
+        }
+        
+        .founder-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #ff0080, #007fff);
+        }
+        
+        .founder-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            border: 3px solid rgba(255,255,255,0.2);
+            object-fit: cover;
+            transition: border-color 0.3s ease;
+        }
+        
+        .founder-card:hover .founder-avatar {
+            border-color: rgba(255,0,128,0.5);
+        }
+        
+        .founder-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+        
+        .founder-title {
+            color: #ff0080;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .team-grid {
+                gap: 2rem;
+            }
+            
+            .founder-card {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">Last Life</a>
+            <ul class="nav-links">
+                <li><a href="#genesis">NFTs & Game</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#links">Links</a></li>
+            </ul>
+            <button class="nav-toggle">☰</button>
+        </div>
+    </nav>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>Last Life</h1>
+            <div class="hero-tagline">The first fighting game where every battle has real stakes.</div>
+            <div class="hero-subtitle">Street Fighter-style game set in a dystopian future.</div>
+            <div class="hero-subtitle">⚔️ Your fighter, your legacy •  🏆 Customize & level up • 💎 Fight for your $LIFE</div>
+        </div>
+    </section>
+
+    <!-- Quick Hits Section -->
+    <section class="quick-hits">
+        <div class="container">
+            <div class="quick-hits-grid">
+                <div class="hit-card">
+                    <div class="hit-icon">🎮💔</div>
+                    <h3>The Problem</h3>
+                    <ul>
+                        <li>Traditional games extract value from players</li>
+                        <li>Grind 1,000 hours, earn legendary gear… then servers shut down</li>
+                        <li>Time, skill, achievements — gone</li>
+                        <li>Gamers accepted it because there was no alternative</li>
+                    </ul>
+                </div>
+                
+                <div class="hit-card">
+                    <div class="hit-icon">⚔️</div>
+                    <h3>The Vision</h3>
+                    <ul>
+                        <li>Win → Claim rewards through skill</li>
+                        <li>Lose → Real consequences</li>
+                        <li>Every match impacts leaderboards and ecosystem rewards</li>
+                        <li>True ownership, real stakes, meaningful rewards for skill</li>
+                    </ul>
+                </div>
+                
+                <div class="hit-card">
+                    <div class="hit-icon">🔥</div>
+                    <h3>Why Now</h3>
+                    <ul>
+                        <li>Great projects emerge regardless of timing.</li>
+                        <li>We build when the vision is clear.</li>
+                        <li>Quality execution beats waiting for perfect conditions.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genesis Fighters Section -->
+    <section class="genesis-section" id="genesis">
+        <div class="container">
+            <div class="genesis-grid">
+                <div class="genesis-visual">
+                    <div class="nft-placeholder">
+                    </div>
+                    <div class="gear-slots">
+                        <div class="gear-slot empty" data-type="head">Head</div>
+                        <div class="gear-slot empty" data-type="necklace">Necklace</div>
+                        <div class="gear-slot empty" data-type="top">Top</div>
+                        <div class="gear-slot empty" data-type="belt">Belt</div>
+                        <div class="gear-slot empty" data-type="bottom">Bottom</div>
+                        <div class="gear-slot empty" data-type="footwear">Footwear</div>
+                    </div>
+                </div>
+                
+                <div class="genesis-content">
+                    <h2>Ultra-Limited Genesis Fighters<br>3,999 NFTs</h2>
+                    <ul class="genesis-features">
+                        <li>Core fighters with unique, never-recreated wearables</li>
+                        <li>VIP Tournament Access + $LIFE ecosystem rewards and leaderboard dominance</li>
+                        <li>6-Slot Modular Combat System for endless customization</li>
+                        <li>Unlock $LIFE tokens and ecosystem rewards</li>
+                        <li>Free battle passes</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 3rem; margin-bottom: 2rem; color: #007fff; font-size: 1.8rem; line-height: 1.3;">Wearables & Creator Economy</h3>
+                    <ul style="margin-top: 1rem; list-style: none; padding: 0;">
+                        <li style="color: #b0b0b0; padding: 0.8rem 0; line-height: 1.6; font-size: 1.1rem;">
+                            🎮 <strong style="color: #e0e0e0;">6-Slot Modular System:</strong> Tradeable NFT gear you can power up, trade, or flex in the ecosystem
+                        </li>
+                        <li style="color: #b0b0b0; padding: 0.8rem 0; line-height: 1.6; font-size: 1.1rem;">
+                            👑 <strong style="color: #e0e0e0;">Exclusive Cosmetics:</strong> Won through tournaments, loot boxes, brand collabs
+                        </li>
+                        <li style="color: #b0b0b0; padding: 0.8rem 0; line-height: 1.6; font-size: 1.1rem;">
+                            🚀 <strong style="color: #e0e0e0;">Future Updates:</strong> Player-created skins with royalties
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enter the Arena -->
+    <section style="padding: 3rem 0; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0f0f0f 100%); position: relative;">
+        <div class="container">
+            <h2 style="
+                font-family: 'Orbitron', monospace;
+                font-size: 3rem;
+                font-weight: 700;
+                text-align: center;
+                margin-bottom: 3rem;
+                color: #ffffff;
+                line-height: 1.2;
+                text-shadow: 
+                    0 0 5px rgba(255, 0, 128, 0.8),
+                    0 0 10px rgba(255, 0, 128, 0.6),
+                    0 0 15px rgba(255, 0, 128, 0.4),
+                    0 0 20px rgba(255, 0, 128, 0.3),
+                    2px 2px 4px rgba(0, 0, 0, 0.8);
+                filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.5));
+            ">Enter the Arena</h2>
+            <div style="position: relative; max-width: 1100px; margin: 0 auto;">
+                <!-- Tournament Frame -->
+                <div style="
+                    position: relative;
+                    background: linear-gradient(45deg, #ff0080, #007fff, #8a2be2, #ff0080);
+                    padding: 4px;
+                    border-radius: 12px;
+                    animation: tournament-glow 3s ease-in-out infinite alternate;
+                ">
+                    <div style="background: #000; border-radius: 8px; padding: 1rem; position: relative;">
+                        <!-- Live Indicator -->
+                        <div style="
+                            position: absolute;
+                            top: -10px;
+                            left: 20px;
+                            background: #ff0080;
+                            color: white;
+                            padding: 8px 16px;
+                            border-radius: 20px;
+                            font-family: 'Orbitron', monospace;
+                            font-weight: 700;
+                            font-size: 0.8rem;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            z-index: 20;
+                            animation: live-pulse 2s infinite;
+                        ">🔴 LIVE</div>
+                        
+                        <!-- Tournament Title -->
+                        <div style="
+                            text-align: center;
+                            margin-bottom: 1rem;
+                            background: linear-gradient(90deg, #ff0080, #007fff);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                        ">
+                            <h2 style="
+                                font-family: 'Orbitron', monospace;
+                                font-size: 2rem;
+                                font-weight: 900;
+                                margin: 0;
+                                text-transform: uppercase;
+                                letter-spacing: 2px;
+                            ">Genesis Tournament Live</h2>
+                        </div>
+                        
+                        <!-- Game Image -->
+                        <img src="fighting-game-battle-arena.jpg" alt="Genesis Tournament Live Match" style="
+                            width: 100%;
+                            height: auto;
+                            border-radius: 8px;
+                            display: block;
+                            margin-bottom: 1rem;
+                        ">
+                        
+                        <!-- Tournament Info Bar -->
+                        <div style="
+                            background: rgba(0,0,0,0.8);
+                            border: 1px solid #007fff;
+                            border-radius: 6px;
+                            padding: 12px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            backdrop-filter: blur(10px);
+                        ">
+                            <div style="color: #007fff; font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 600;">
+                                QUARTERFINALS • ROUND 1
+                            </div>
+                            <div style="color: #ffd700; font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 600;">
+                                $LIFE 100,000
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        @keyframes tournament-glow {
+            0% { box-shadow: 0 0 20px rgba(255, 0, 128, 0.5), 0 0 40px rgba(0, 127, 255, 0.3); }
+            100% { box-shadow: 0 0 40px rgba(255, 0, 128, 0.8), 0 0 60px rgba(0, 127, 255, 0.5); }
+        }
+        
+        @keyframes live-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+    </style>
+
+    <!-- Tokenomics Section -->
+    <section class="tokenomics">
+        <div class="container">
+            <h2>$LIFE Token (100M Supply)</h2>
+            
+            <div class="token-bar">
+                <div class="token-segment">70% Community</div>
+                <div class="token-segment">25% Contributors</div>
+                <div class="token-segment">5% Treasury</div>
+            </div>
+            
+            <div class="token-utilities">
+                <div class="utility-item">
+                    <div class="icon">🔧</div>
+                    <div>Advanced Crafting</div>
+                </div>
+                <div class="utility-item">
+                    <div class="icon">🗳️</div>
+                    <div>Governance</div>
+                </div>
+                <div class="utility-item">
+                    <div class="icon">🏆</div>
+                    <div>Rewards</div>
+                </div>
+                <div class="utility-item">
+                    <div class="icon">🛒</div>
+                    <div>Marketplace</div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Core Principles Section -->
+    <section class="principles">
+        <div class="container">
+            <h2>Core Principles</h2>
+            <div class="principles-grid">
+                <div class="principle-card">
+                    <div class="icon">💎</div>
+                    <h4>Ownership</h4>
+                    <p>Your fighters, your $LIFE, your victories</p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="icon">🎮</div>
+                    <h4>Fun or Die</h4>
+                    <p>If it's not fun, nothing else matters</p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="icon">🥋</div>
+                    <h4>Skill > Wallet</h4>
+                    <p>Skill determines your destiny</p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="icon">🏗️</div>
+                    <h4>Build Through Every Season</h4>
+                    <p>Great projects emerge regardless of timing</p>
+                </div>
+                
+                <div class="principle-card">
+                    <div class="icon">🤝</div>
+                    <h4>Community Shapes Destiny</h4>
+                    <p>$LIFE holders decide</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team" id="team">
+        <div class="container">
+            <h2>Team</h2>
+            <div class="team-grid">
+                <a href="https://x.com/ac253189" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="acpfp.jpg" alt="AC" class="founder-avatar">
+                        <div class="founder-name">AC</div>
+                    </div>
+                </a>
+
+                <a href="https://x.com/888g6mini" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="maepfp.jpg" alt="Mae" class="founder-avatar">
+                        <div class="founder-name">Mae</div>
+                    </div>
+                </a>
+
+                <a href="https://x.com/JonYale" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="jy-pfp-crop.png" alt="JY" class="founder-avatar">
+                        <div class="founder-name">JY</div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Advisors Section -->
+    <section class="team" style="padding-top: 2rem;">
+        <div class="container">
+            <h2>Advisors</h2>
+            <div class="team-grid">
+                <a href="https://x.com/MarianneNFTs" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="marianne-pfp.jpg" alt="Marianne" class="founder-avatar">
+                        <div class="founder-name">Marianne</div>
+                    </div>
+                </a>
+
+                <a href="https://x.com/Zaddy_Fi" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="zaddypfp.jpg" alt="Zaddy" class="founder-avatar">
+                        <div class="founder-name">Zaddy</div>
+                    </div>
+                </a>
+
+                <a href="https://x.com/meg_thorpe_" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="megpfp.jpg" alt="Meg" class="founder-avatar">
+                        <div class="founder-name">Meg</div>
+                    </div>
+                </a>
+
+                <a href="https://x.com/crisnochris" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                    <div class="founder-card">
+                        <img src="christianpfp.jpg" alt="Christian" class="founder-avatar">
+                        <div class="founder-name">Christian</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genesis Mint CTA Section -->
+    <section class="cta" id="links">
+        <div class="container">
+            <div class="cta-content">
+                <h2>🚨 Ultra-Limited Genesis: 3,999 Fighters. Exclusive Access.</h2>
+                
+                <div class="cta-links">
+                    <a href="https://last-life-1.gitbook.io/last-life-docs" class="cta-button">Gitbook Docs</a>
+                    <a href="https://x.com/lastlifeio" class="cta-button">X/Twitter</a>
+                </div>
+                
+                <div class="final-tagline">Enter the arena. Fight for your $LIFE.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Powered by Abstract Footer -->
+    <footer style="text-align: center; padding: 2rem 0; background: rgba(0,0,0,0.1); border-top: 1px solid rgba(255,255,255,0.05);">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+            <span style="color: #666; font-size: 0.9rem; font-family: 'Inter', sans-serif;">Powered by Abstract</span>
+            <img src="abstract-logo.jpg" alt="Abstract" style="height: 20px; opacity: 0.8;">
+        </div>
+    </footer>
+
+    <script>
+        // Mobile navigation toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        navLinks.addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                navLinks.classList.remove('active');
+            }
+        });
+
+        // Navbar scroll effect and back to top button functionality
+        const navbar = document.querySelector('.navbar');
+        const backToTopButton = document.querySelector('.back-to-top');
+
+        window.addEventListener('scroll', () => {
+            // Navbar transparency effect
+            if (window.pageYOffset > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Back to top button
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>
